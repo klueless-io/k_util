@@ -8,14 +8,28 @@ As a Developer, I need simple utility helpers, to solve cross cutting issues and
 
 ### Sample Classes
 
+#### Console Helpers
+
+Generate encoded strings that have meaning in the console
+
+```ruby
+puts KUtil.console.hyperlink('Google', 'https://google.com')
+
+# "Google"
+# (clickable hyperlink to the google website)
+
+puts KUtil.console.file_hyperlink('My File', '/somepath/my-file.txt')
+
+# "My File"
+# (clickable link to the a file in the file system)
+```
+
 #### Example
 
 Some common examples
 
 ```ruby
-puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
-puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
-puts KUtil.file.pathname_absolute?('/somepath/somefile.rb')
+# Expand Path
 
 puts KUtil.file.expand_path('file.rb')
 
@@ -32,6 +46,8 @@ puts KUtil.file.expand_path('~/file.rb')
 puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
 
 # /klue-less/xyz/file.rb
+
+# Absolute path/file name
 
 puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
 
