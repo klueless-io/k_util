@@ -1,72 +1,90 @@
 # frozen_string_literal: true
 
-# require 'spec_helper'
+require 'spec_helper'
 
-# RSpec.describe KUtil::FileHelper do
-#   describe 'module helper' do
-#     subject { KUtil.file }
+RSpec.describe KUtil::FileHelper do
+  describe 'module helper' do
+    subject { KUtil.file }
 
-#     it { is_expected.not_to be_nil }
+    it { is_expected.not_to be_nil }
 
-#     it { expect(subject.expand_path('file.rb', '/klue-less/xyz')).to eq('/klue-less/xyz/file.rb') }
-#     it { expect(subject.pathname_absolute?('somepath/somefile.rb')).to eq(false) }
-#     it { expect(subject.pathname_absolute?('/somepath/somefile.rb')).to eq(true) }
-#   end
+    fit do
+      puts KUtil.file.expand_path('file.rb')
+      puts KUtil.file.expand_path('/file.rb')
+      puts KUtil.file.expand_path('~/file.rb')
+      puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
+      puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
+      puts KUtil.file.pathname_absolute?('/somepath/somefile.rb')
+    end
 
-#   describe '#pathname_absolute?' do
-#     subject { described_class.pathname_absolute?(file) }
+    it { expect(subject.expand_path('file.rb', '/klue-less/xyz')).to eq('/klue-less/xyz/file.rb') }
+    it { expect(subject.pathname_absolute?('somepath/somefile.rb')).to eq(false) }
+    it { expect(subject.pathname_absolute?('/somepath/somefile.rb')).to eq(true) }
+  end
 
-#     context 'when filename only' do
-#       let(:file) { 'somefile.rb' }
+  describe '#expand_path' do
+    subject { described_class.expand_path(file, base_path) }
 
-#       it { is_expected.to be_falsey }
-#     end
+    let(:base_path) { nil }
 
-#     context 'when relative path / filename' do
-#       let(:file) { 'somepath/somefile.rb' }
+    context 'when filename only' do
+      let(:file) { 'somefile.rb' }
 
-#       it { is_expected.to be_falsey }
-#     end
+      it { is_expected.to eq(File.join(Dir.pwd, file)) }
+    end
 
-#     context 'when absolute file' do
-#       let(:file) { '/somefile.rb' }
+    context 'when relative path / filename' do
+      let(:file) { 'somepath/somefile.rb' }
 
-#       it { is_expected.to be_truthy }
-#     end
+      it { is_expected.to eq(File.join(Dir.pwd, file)) }
+    end
 
-#     context 'when tilda expanded file' do
-#       let(:file) { '~/somefile.rb' }
+    context 'when filename and base path' do
+      let(:file) { 'somefile.rb' }
+      let(:base_path) { '/abc/xyz' }
 
-#       it { is_expected.to be_falsey }
-#     end
-#   end
+      it { is_expected.to eq(File.join(base_path, file)) }
+    end
 
-#   describe '#pathname_absolute?' do
-#     subject { described_class.expand_path(file, '/klue-less/xyz') }
+    context 'when absolute file' do
+      let(:file) { '/somefile.rb' }
 
-#     context 'when relative filename' do
-#       let(:file) { 'somefile.rb' }
+      it { is_expected.to eq(file) }
+    end
 
-#       it { is_expected.to eq('/klue-less/xyz/somefile.rb') }
-#     end
+    context 'when file in home directory (~ tilda)' do
+      let(:file) { '~/somefile.rb' }
 
-#     context 'when relative path/filename' do
-#       let(:file) { 'somepath/somefile.rb' }
+      it { is_expected.to eq(File.expand_path(file)) }
+    end
+  end
 
-#       it { is_expected.to eq('/klue-less/xyz/somepath/somefile.rb') }
-#     end
+  describe '#pathname_absolute?' do
+    subject { described_class.expand_path(file, '/klue-less/xyz') }
 
-#     context 'when absolute filename' do
-#       let(:file) { '/somefile.rb' }
+    context 'when relative filename' do
+      let(:file) { 'somefile.rb' }
 
-#       it { is_expected.to eq('/somefile.rb') }
-#     end
+      it { is_expected.to eq('/klue-less/xyz/somefile.rb') }
+    end
 
-#     context 'when tilda ~/filename' do
-#       let(:file) { '~/somefile.rb' }
+    context 'when relative path/filename' do
+      let(:file) { 'somepath/somefile.rb' }
 
-#       it { is_expected.to start_with('/Users') & end_with('/somefile.rb') }
-#       it { is_expected.not_to include('klue-less') }
-#     end
-#   end
-# end
+      it { is_expected.to eq('/klue-less/xyz/somepath/somefile.rb') }
+    end
+
+    context 'when absolute filename' do
+      let(:file) { '/somefile.rb' }
+
+      it { is_expected.to eq('/somefile.rb') }
+    end
+
+    context 'when tilda ~/filename' do
+      let(:file) { '~/somefile.rb' }
+
+      it { is_expected.to start_with('/Users') & end_with('/somefile.rb') }
+      it { is_expected.not_to include('klue-less') }
+    end
+  end
+end

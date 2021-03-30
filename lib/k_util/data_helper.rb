@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Provide data object helper functions
 # module KDsl
 #   # File utilities
 #   module Util
