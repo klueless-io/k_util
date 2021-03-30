@@ -7,16 +7,6 @@ RSpec.describe KUtil::FileHelper do
     subject { KUtil.file }
 
     it { is_expected.not_to be_nil }
-
-    fit do
-      puts KUtil.file.expand_path('file.rb')
-      puts KUtil.file.expand_path('/file.rb')
-      puts KUtil.file.expand_path('~/file.rb')
-      puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
-      puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
-      puts KUtil.file.pathname_absolute?('/somepath/somefile.rb')
-    end
-
     it { expect(subject.expand_path('file.rb', '/klue-less/xyz')).to eq('/klue-less/xyz/file.rb') }
     it { expect(subject.pathname_absolute?('somepath/somefile.rb')).to eq(false) }
     it { expect(subject.pathname_absolute?('/somepath/somefile.rb')).to eq(true) }

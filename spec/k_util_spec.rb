@@ -5,8 +5,8 @@ RSpec.describe KUtil do
     expect(KUtil::VERSION).not_to be nil
   end
 
-  it 'has a standard error' do
-    expect { raise KUtil::Error, 'some message' }
-      .to raise_error('some message')
-  end
+  # it 'has a standard error' do
+  #   expect { raise KUtil::Error, 'some message' }
+  #     .to raise_error('some message')
+  # end
 end
