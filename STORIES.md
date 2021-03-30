@@ -2,7 +2,7 @@
 
 > KUtil provides simple utility methods
 
-As a Developer, I need simple utility helpers, to solve cross cutting issues
+As a Developer, I need simple utility helpers, to solve cross cutting issues and simplify common access methods
 
 ## Development radar
 

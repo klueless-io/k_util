@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
 
   spec.summary                = 'KUtil provides simple utility methods'
   spec.description            = <<-TEXT
-    KUtil provides simple utility methods
+    KUtil provides simple utility methods, such as file helpers, data object helpers and more.
   TEXT
   spec.homepage               = 'http://appydave.com/gems/k-util'
   spec.license                = 'MIT'

@@ -26,7 +26,7 @@ gem install k_util
 
 ### Main Story
 
-As a Developer, I need simple utility helpers, to solve cross cutting issues
+As a Developer, I need simple utility helpers, to solve cross cutting issues and simplify common access methods
 
 See all [stories](./STORIES.md)
 
@@ -36,12 +36,38 @@ See all [usage examples](./USAGE.md)
 
 ### Basic Example
 
-#### Basic example
+#### Examples
 
-Description for a basic example to be featured in the main README.MD file
+Some common examples
 
 ```ruby
-class SomeRuby; end
+puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
+puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
+puts KUtil.file.pathname_absolute?('/somepath/somefile.rb')
+
+puts KUtil.file.expand_path('file.rb')
+
+# /current/folder/file.rb
+
+puts KUtil.file.expand_path('/file.rb')
+
+# /file.rb
+
+puts KUtil.file.expand_path('~/file.rb')
+
+# /Users/current-user/file.rb
+
+puts KUtil.file.expand_path('file.rb', '/klue-less/xyz')
+
+# /klue-less/xyz/file.rb
+
+puts KUtil.file.pathname_absolute?('somepath/somefile.rb')
+
+# false
+
+puts KUtil.file.pathname_absolute?('/somepath/somefile.rb')
+
+# true
 ```
 
 ## Development
@@ -68,10 +94,8 @@ Aaa::Bbb::Program.execute()
 To release a new version, update the version number in `version.rb`, build the gem and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ```bash
-gem build
-gem push rspec-usecases-?.?.??.gem
-# or push the latest gem
-ls *.gem | sort -r | head -1 | xargs gem push
+rake publish
+rake clean
 ```
 
 ## Contributing
