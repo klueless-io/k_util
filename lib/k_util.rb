@@ -5,6 +5,7 @@ require 'k_util/console_helper'
 require 'k_util/data_helper'
 require 'k_util/file_helper'
 
+# Provide various helper functions
 module KUtil
   # raise KUtil::Error, 'Sample message'
   # class Error < StandardError; end
