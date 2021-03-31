@@ -6,6 +6,7 @@ require 'json'
 ThunderBirds = Struct.new(:action)
 
 RSpec.describe KUtil::DataHelper do
+  let(:instance) { described_class.new }
   # it 'sample' do
   #   virgil = OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded))
   #   penny = OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go))
@@ -30,7 +31,7 @@ RSpec.describe KUtil::DataHelper do
   end
 
   describe '#to_open_struct' do
-    subject { described_class.to_open_struct(data) }
+    subject { instance.to_open_struct(data) }
 
     # it { expect { subject }.to raise_error KError }
     context 'when simple hash' do
@@ -116,7 +117,7 @@ RSpec.describe KUtil::DataHelper do
   end
 
   describe '#clean_symbol' do
-    subject { described_class.clean_symbol(value) }
+    subject { instance.clean_symbol(value) }
 
     let(:value) { nil }
 

@@ -3,6 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe KUtil::FileHelper do
+  let(:instance) { described_class.new }
+
   describe 'module helper' do
     subject { KUtil.file }
 
@@ -13,7 +15,7 @@ RSpec.describe KUtil::FileHelper do
   end
 
   describe '#expand_path' do
-    subject { described_class.expand_path(file, base_path) }
+    subject { instance.expand_path(file, base_path) }
 
     let(:base_path) { nil }
 
@@ -50,7 +52,7 @@ RSpec.describe KUtil::FileHelper do
   end
 
   describe '#pathname_absolute?' do
-    subject { described_class.expand_path(file, '/klue-less/xyz') }
+    subject { instance.expand_path(file, '/klue-less/xyz') }
 
     context 'when relative filename' do
       let(:file) { 'somefile.rb' }
