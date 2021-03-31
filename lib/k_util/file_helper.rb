@@ -2,13 +2,9 @@
 
 # Provide file helper functions
 module KUtil
-  class << self
-    attr_accessor :file
-  end
-
   # Helper methods attached to the namespace for working with Files
   class FileHelper
-    def self.expand_path(filename, base_path = nil)
+    def expand_path(filename, base_path = nil)
       if pathname_absolute?(filename)
         filename
       elsif filename.start_with?('~/')
@@ -18,10 +14,8 @@ module KUtil
       end
     end
 
-    def self.pathname_absolute?(pathname)
+    def pathname_absolute?(pathname)
       Pathname.new(pathname).absolute?
     end
   end
 end
-
-KUtil.file = KUtil::FileHelper

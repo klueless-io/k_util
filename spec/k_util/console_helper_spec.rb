@@ -3,10 +3,12 @@
 require 'spec_helper'
 
 RSpec.describe KUtil::ConsoleHelper do
-  fit 'samples' do
-    puts KUtil.console.hyperlink('Google', 'https://google.com')
-    puts KUtil.console.file_hyperlink('My File', '/somepath/my-file.txt')
-  end
+  let(:instance) { described_class.new }
+
+  # it 'samples' do
+  #   puts KUtil.console.hyperlink('Google', 'https://google.com')
+  #   puts KUtil.console.file_hyperlink('My File', '/somepath/my-file.txt')
+  # end
 
   describe 'module helper' do
     subject { KUtil.console }
@@ -15,7 +17,7 @@ RSpec.describe KUtil::ConsoleHelper do
   end
 
   describe '#file_hyperlink' do
-    subject { described_class.file_hyperlink(text, file) }
+    subject { instance.file_hyperlink(text, file) }
 
     let(:text) { 'My Text' }
     let(:file) { '/somepath/my-file.txt' }
@@ -26,7 +28,7 @@ RSpec.describe KUtil::ConsoleHelper do
   end
 
   describe '#hyperlink' do
-    subject { described_class.hyperlink(text, link) }
+    subject { instance.hyperlink(text, link) }
 
     let(:text) { 'Google' }
     let(:link) { 'https://google.com' }
