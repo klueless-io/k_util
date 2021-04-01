@@ -20,3 +20,5 @@ module KUtil
   KUtil.data = KUtil::DataHelper.new
   KUtil.file = KUtil::FileHelper.new
 end
+
+puts "KUtil::Version: #{KUtil::VERSION}" if ENV['KLUE_DEBUG']&.to_s&.downcase == 'true'
