@@ -78,4 +78,38 @@ RSpec.describe KUtil::FileHelper do
       it { is_expected.to be_falsey }
     end
   end
+
+  describe '#has_home?' do
+    subject { instance.has_home?(file) }
+
+    context 'when filename' do
+      let(:file) { 'somefile.rb' }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when relative path/filename' do
+      let(:file) { 'somepath/somefile.rb' }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when absolute filename' do
+      let(:file) { '/somefile.rb' }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when tilda + filename ~filename' do
+      let(:file) { '~somefile.rb' }
+
+      it { is_expected.to be_falsey }
+    end
+
+    context 'when tilda ~/filename' do
+      let(:file) { '~/somefile.rb' }
+
+      it { is_expected.to be_truthy }
+    end
+  end
 end
