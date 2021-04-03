@@ -52,31 +52,30 @@ RSpec.describe KUtil::FileHelper do
   end
 
   describe '#pathname_absolute?' do
-    subject { instance.expand_path(file, '/klue-less/xyz') }
+    subject { instance.pathname_absolute?(file) }
 
     context 'when relative filename' do
       let(:file) { 'somefile.rb' }
 
-      it { is_expected.to eq('/klue-less/xyz/somefile.rb') }
+      it { is_expected.to be_falsey }
     end
 
     context 'when relative path/filename' do
       let(:file) { 'somepath/somefile.rb' }
 
-      it { is_expected.to eq('/klue-less/xyz/somepath/somefile.rb') }
+      it { is_expected.to be_falsey }
     end
 
     context 'when absolute filename' do
       let(:file) { '/somefile.rb' }
 
-      it { is_expected.to eq('/somefile.rb') }
+      it { is_expected.to be_truthy }
     end
 
     context 'when tilda ~/filename' do
       let(:file) { '~/somefile.rb' }
 
-      it { is_expected.to start_with('/Users') & end_with('/somefile.rb') }
-      it { is_expected.not_to include('klue-less') }
+      it { is_expected.to be_falsey }
     end
   end
 end
