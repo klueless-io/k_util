@@ -14,7 +14,7 @@ module KUtil
       end
     end
 
-    def has_home?(path)
+    def home?(path)
       path.start_with?('~/')
     end
 

@@ -79,8 +79,8 @@ RSpec.describe KUtil::FileHelper do
     end
   end
 
-  describe '#has_home?' do
-    subject { instance.has_home?(file) }
+  describe '#home?' do
+    subject { instance.home?(file) }
 
     context 'when filename' do
       let(:file) { 'somefile.rb' }
