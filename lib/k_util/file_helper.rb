@@ -14,6 +14,10 @@ module KUtil
       end
     end
 
+    def has_home?(path)
+      path.start_with?('~/')
+    end
+
     def pathname_absolute?(pathname)
       Pathname.new(pathname).absolute?
     end
