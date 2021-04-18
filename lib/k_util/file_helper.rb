@@ -21,5 +21,10 @@ module KUtil
     def pathname_absolute?(pathname)
       Pathname.new(pathname).absolute?
     end
+    alias absolute? pathname_absolute?
+
+    def home_or_absolute?(path)
+      home?(path) || absolute?(path)
+    end
   end
 end

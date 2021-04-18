@@ -2,6 +2,7 @@
 
 require 'k_util/version'
 require 'k_util/console_helper'
+require 'k_util/data/instance_variables_to_h'
 require 'k_util/data_helper'
 require 'k_util/file_helper'
 
@@ -25,5 +26,5 @@ if ENV['KLUE_DEBUG']&.to_s&.downcase == 'true'
   namespace = 'KUtil::Version'
   file_path = $LOADED_FEATURES.find { |f| f.include?('k_util/version') }
   version   = KUtil::VERSION.ljust(9)
-  puts "#{namespace.ljust(40)} : #{version.ljust(9)} : #{file_path}"
+  puts "#{namespace.ljust(35)} : #{version.ljust(9)} : #{file_path}"
 end
