@@ -1,0 +1,1 @@
+ThunderBirds = Struct.new(:action)

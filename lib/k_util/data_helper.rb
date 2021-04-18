@@ -39,7 +39,7 @@ module KUtil
         when Array
           # No test yet
           values = value.map do |v|
-            v.is_a?(OpenStruct) || v.is_a?(Struct) || v.is_a?(Hash) ? struct_to_hash(v) : v
+            v.is_a?(OpenStruct) || v.is_a?(Struct) || v.is_a?(Hash) ? to_hash(v) : v
           end
           hash[key] = values
         else
@@ -53,6 +53,26 @@ module KUtil
       return value if value.nil?
 
       value.is_a?(Symbol) ? value.to_s : value
+    end
+
+    # Add if needed
+    # # Is the value a basic (aka primitive) type
+    # def basic_type?(value)
+    #   value.is_a?(String) ||
+    #     value.is_a?(Symbol) ||
+    #     value.is_a?(FalseClass) ||
+    #     value.is_a?(TrueClass) ||
+    #     value.is_a?(Integer) ||
+    #     value.is_a?(Float)
+    # end
+
+    # Is the value a complex container type, but not a regular class.
+    def hash_convertible?(value)
+      value.is_a?(Array) ||
+        value.is_a?(Hash) ||
+        value.is_a?(Struct) ||
+        value.is_a?(OpenStruct) ||
+        value.respond_to?(:to_h)
     end
   end
 end

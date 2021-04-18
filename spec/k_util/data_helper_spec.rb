@@ -2,11 +2,12 @@
 
 require 'spec_helper'
 require 'json'
-
-ThunderBirds = Struct.new(:action)
+require 'mocks/hash_convertible'
+require 'mocks/thunder_birds'
 
 RSpec.describe KUtil::DataHelper do
   let(:instance) { described_class.new }
+  
   # it 'sample' do
   #   virgil = OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded))
   #   penny = OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go))
@@ -17,7 +18,7 @@ RSpec.describe KUtil::DataHelper do
   #     key3: ThunderBirds.new(:are_go),
   #     people: [virgil, penny]
   #   }
-
+    
   #   data_open = KUtil.data.to_open_struct(data)
   #   data_hash = KUtil.data.to_hash(data_open)
 
@@ -135,6 +136,52 @@ RSpec.describe KUtil::DataHelper do
       let(:value) { :a_symbol }
 
       it { is_expected.to eq('a_symbol') }
+    end
+  end
+
+  # Add if needed
+  # describe '#basic_type?' do
+  #   subject { instance.basic_type?(value) }
+
+  #   context 'when value is string' do
+  #     let(:value) { 'a_string' }
+
+  #     it { is_expected.to eq(true) }
+  #   end
+
+  #   context 'when value is integer' do
+  #     let(:value) { 123 }
+
+  #     it { is_expected.to eq(true) }
+  #   end
+  # end
+
+  describe '#hash_convertible?' do
+    subject { instance.hash_convertible?(value) }
+
+    context 'when value is array' do
+      let(:value) { [] }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is hash' do
+      let(:value) { {} }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is struct' do
+      let(:value) { Struct.new(:a).new('aaa') }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is open struct' do
+      let(:value) { OpenStruct.new(a: 'aaa') }
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is convertible to hash' do
+      let(:value) { HashConvertible.new('aaa', 'bbb', { ccc: :ccc }) }
+      it { is_expected.to eq(true) }
     end
   end
 end
