@@ -7,7 +7,7 @@ require 'mocks/thunder_birds'
 
 RSpec.describe KUtil::DataHelper do
   let(:instance) { described_class.new }
-  
+
   # it 'sample' do
   #   virgil = OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded))
   #   penny = OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go))
@@ -18,7 +18,7 @@ RSpec.describe KUtil::DataHelper do
   #     key3: ThunderBirds.new(:are_go),
   #     people: [virgil, penny]
   #   }
-    
+
   #   data_open = KUtil.data.to_open_struct(data)
   #   data_hash = KUtil.data.to_hash(data_open)
 

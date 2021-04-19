@@ -45,21 +45,23 @@ RSpec.describe KUtil::Data::InstanceVariablesToH do
         HashConvertible.new('David', 333, key3, [virgil, penny])
       end
 
-      it do
+      fit do
         is_expected.to eq(
           {
             'key1' => 'David',
             'key2' => 333,
-            'key3' => { value: { action: :are_go }
-            },
+            'key3' => { value: { action: :are_go } },
             'people' => [
               { age: 73, name: 'Virgil Tracy', thunder_bird: { action: :are_grounded } },
               { age: 69, name: 'Lady Penelope', thunder_bird: { action: :are_go } }
             ]
           }
         )
+        data_open = KUtil.data.to_open_struct(data)
+        data_hash = KUtil.data.to_hash(data_open)
+
+        puts JSON.pretty_generate(data_hash)
       end
     end
   end
-
 end
