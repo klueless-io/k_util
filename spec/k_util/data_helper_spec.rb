@@ -117,6 +117,68 @@ RSpec.describe KUtil::DataHelper do
     end
   end
 
+  describe 'hash -> #to_open_struct | #to_hash | #json_parse' do
+    let(:data) do
+      {
+        id: '12345',
+        type: 'New repository created',
+        author: { id: 1, login: 'abc' },
+        created_at: '2011-09-06T17:26:27Z',
+        comments: [{ id: 1, comment: 'abc' }, { id: 2, comment: 'xyz' }]
+      }
+    end
+    let(:json) { data.to_json }
+
+    context 'check for data lost through multiple translations' do
+      it 'hash -> to_open_struct -> to_hash' do
+        as_ostruct = instance.to_open_struct(data)
+        as_hash    = instance.to_hash(as_ostruct)
+        expect(as_hash).to eq(data)
+      end
+
+      it 'json -> json_parse(as: :open_struct) -> to_hash' do
+        as_ostruct = instance.json_parse(json, as: :open_struct)
+        as_hash    = instance.to_hash(as_ostruct)
+        expect(as_hash).to eq(data)
+      end
+
+      it 'json -> json_parse(as: :hash_symbolized)' do
+        as_hash = instance.json_parse(json, as: :hash_symbolized)
+        expect(as_hash).to eq(data)
+      end
+
+      it 'hash -> to_open_struct -> to_hash -> to_json' do
+        as_ostruct = instance.to_open_struct(data)
+        as_hash    = instance.to_hash(as_ostruct)
+        as_json    = as_hash.to_json
+        expect(as_json).to eq(json)
+      end
+    end
+  end
+
+  describe '#json_parse' do
+    subject { instance.json_parse(json, as: as) }
+
+    let(:json) { { response: { code: 200, message: 'message' } }.to_json }
+    let(:as) { :hash }
+
+    context 'as:' do
+      context ':hash' do
+        it { is_expected.to eq({ 'response' => { 'code' => 200, 'message' => 'message' } }) }
+      end
+
+      context ':hash_symbolized' do
+        let(:as) { :hash_symbolized }
+        it { is_expected.to eq({ response: { code: 200, message: 'message' } }) }
+      end
+
+      context ':open_struct' do
+        let(:as) { :open_struct }
+        it { is_expected.to have_attributes(response: have_attributes(code: 200, message: 'message')) }
+      end
+    end
+  end
+
   describe '#clean_symbol' do
     subject { instance.clean_symbol(value) }
 
