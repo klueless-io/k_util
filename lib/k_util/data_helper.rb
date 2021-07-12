@@ -4,7 +4,24 @@
 module KUtil
   # Helper methods attached to the namespace for working with Data
   class DataHelper
+    # Convert JSON string into to_open_struct but designed to work with a JSON string
+    #
+    # https://docs.ruby-lang.org/en/master/JSON.html
+    # rubocop:disable Naming/MethodParameterName
+    def json_parse(json, as: :hash)
+      case as
+      when :hash
+        JSON.parse(json)
+      when :hash_symbolized
+        JSON.parse(json, symbolize_names: true)
+      when :open_struct
+        JSON.parse(json, object_class: OpenStruct)
+      end
+    end
+    # rubocop:enable Naming/MethodParameterName
+
     # Convert various data types (Hash, Array, Struct) into a deep nested OpenStruct
+    #
     # or an array of deep nested OpenStruct
     def to_open_struct(data)
       case data
