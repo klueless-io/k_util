@@ -106,14 +106,16 @@ RSpec.describe KUtil::DataHelper do
       end
     end
 
-    context 'when mixture of Struct, OpenStruct and Hash at depth' do
+    context 'when mixture of Struct, Dry::Struct, OpenStruct, Custom Class and Hash at depth' do
       let(:p1) { OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded)) }
       let(:p2) { OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go)) }
       let(:data) do
         { key1: 'David',
           key2: 333,
           key3: ThunderBirds.new(:are_go),
-          people: [p1, p2] }
+          people: [p1, p2],
+          dry: dry1,
+          custom: custom_a1 }
       end
 
       it do

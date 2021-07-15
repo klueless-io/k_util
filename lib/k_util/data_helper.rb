@@ -24,20 +24,12 @@ module KUtil
     #
     # or an array of deep nested OpenStruct
     def to_open_struct(data)
-      case data
-      when Hash
-        OpenStruct.new(data.transform_values { |v| to_open_struct(v) })
+      return OpenStruct.new(data.transform_values { |v| to_open_struct(v) })  if data.is_a?(Hash)
+      return data.map { |o| to_open_struct(o) }                               if data.is_a?(Array)
+      return to_open_struct(data.to_h)                                        if hash_convertible?(data)
 
-      when Array
-        data.map { |o| to_open_struct(o) }
-
-      when Struct, OpenStruct, Dry::Struct
-        to_open_struct(data.to_h)
-
-      else
-        # Some primitave type: String, True/False or an ObjectStruct
-        data
-      end
+      # Some primitave type: String, True/False or an ObjectStruct
+      data
     end
 
     # rubocop:disable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -45,16 +37,12 @@ module KUtil
     def to_hash(data)
       return {} if data.nil?
 
-      return data.map { |v| hash_convertible?(v) ? to_hash(v) : v } if data.is_a?(Array)
+      return data.map { |value| hash_convertible?(value) ? to_hash(value) : value } if data.is_a?(Array)
 
-      return to_hash(data.to_h)                                     if !data.is_a?(Hash) && data.respond_to?(:to_h)
+      return to_hash(data.to_h) if !data.is_a?(Hash) && data.respond_to?(:to_h)
 
       data.each_pair.with_object({}) do |(key, value), hash|
-        hash[key] = if hash_convertible?(value)
-                      to_hash(value)
-                    else
-                      value
-                    end
+        hash[key] = hash_convertible?(value) ? to_hash(value) : value
       end
     end
     # rubocop:enable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
