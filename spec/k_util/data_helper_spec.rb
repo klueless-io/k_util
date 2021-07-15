@@ -2,21 +2,34 @@
 
 require 'spec_helper'
 require 'json'
+require 'mocks/custom'
+require 'mocks/dry'
 require 'mocks/hash_convertible'
 require 'mocks/thunder_birds'
 
 RSpec.describe KUtil::DataHelper do
   let(:instance) { described_class.new }
 
-  # it 'sample' do
+  inner = Struct.new(:name)
+  outer = Struct.new(:name, :age, :more)
+
+  let(:custom_a1) { CustomA.new(name: 'John Doe') }
+  let(:virgil) { OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded)) }
+  let(:penny) { OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go)) }
+  let(:dry1) { DryA.new(name: 'dry1.name', age: 21, more: { name: 'me' }) }
+  let(:struct1) { outer.new('struct1.name', 22, inner.new('normal struct')) }
+
+  # fit 'sample' do
   #   virgil = OpenStruct.new(name: 'Virgil Tracy', age: 73, thunder_bird: ThunderBirds.new(:are_grounded))
   #   penny = OpenStruct.new(name: 'Lady Penelope', age: 69, thunder_bird: ThunderBirds.new(:are_go))
+  #   dry = DryA.new(name: 'dry_a.name', age: 21, list: ['a', 'list', 'of', 'stuff'], more: { name: 'me' })
 
   #   data = {
   #     key1: 'David',
   #     key2: 333,
   #     key3: ThunderBirds.new(:are_go),
-  #     people: [virgil, penny]
+  #     people: [virgil, penny],
+  #     dry: dry
   #   }
 
   #   data_open = KUtil.data.to_open_struct(data)
@@ -113,6 +126,89 @@ RSpec.describe KUtil::DataHelper do
             have_attributes(name: 'Lady Penelope', age: 69, thunder_bird: have_attributes(action: :are_go))
           )
         )
+      end
+    end
+  end
+
+  describe '#to_hash' do
+    subject { instance.to_hash(data) }
+
+    context 'root is empty' do
+      context 'when nil' do
+        let(:data) { nil }
+        it { is_expected.to eq({}) }
+      end
+
+      context 'when {}' do
+        let(:data) { {} }
+        it { is_expected.to eq({}) }
+      end
+    end
+
+    context 'root object is array' do
+      context 'when simple array' do
+        let(:data) { ['a', :b, :c] }
+        it { is_expected.to eq(['a', :b, :c]) }
+      end
+
+      context 'when mixed array (hash, struct, open-struct, dry-struct, custom class with to_h)' do
+        let(:data) { [{ simple: :hash }, virgil, dry1, struct1, custom_a1] }
+        let(:expected) do
+          [
+            { simple: :hash },
+            { age: 73,
+              name: 'Virgil Tracy',
+              thunder_bird: { action: :are_grounded } },
+            { age: 21,
+              more: { name: 'me' },
+              name: 'dry1.name' },
+            { age: 22,
+              more: { name: 'normal struct' },
+              name: 'struct1.name' },
+            { name: 'John Doe' }
+          ]
+        end
+
+        it { is_expected.to eq(expected) }
+      end
+    end
+
+    context 'root object is hash' do
+      context 'when types are mixed at depth' do
+        let(:data) do
+          {
+            simple: :hash,
+            open: virgil,
+            dry: dry1,
+            struct: struct1,
+            custom: custom_a1,
+            deep_array: [{ simple: :hash }, virgil, dry1, struct1, custom_a1]
+          }
+        end
+        let(:expected) do
+          {
+            custom: { name: 'John Doe' },
+            dry: { age: 21, more: { name: 'me' }, name: 'dry1.name' },
+            open: { age: 73, name: 'Virgil Tracy', thunder_bird: { action: :are_grounded } },
+            simple: :hash,
+            struct: { age: 22, more: { name: 'normal struct' }, name: 'struct1.name' },
+            deep_array: [
+              { simple: :hash },
+              { age: 73,
+                name: 'Virgil Tracy',
+                thunder_bird: { action: :are_grounded } },
+              { age: 21,
+                more: { name: 'me' },
+                name: 'dry1.name' },
+              { age: 22,
+                more: { name: 'normal struct' },
+                name: 'struct1.name' },
+              { name: 'John Doe' }
+            ]
+          }
+        end
+
+        it { is_expected.to eq(expected) }
       end
     end
   end
@@ -246,4 +342,17 @@ RSpec.describe KUtil::DataHelper do
       it { is_expected.to eq(true) }
     end
   end
+
+  # TODO
+  #   describe '#json mapping for custom objects' do
+  #     fit {
+  #       a = CustomA.new
+  #       b1 = CustomB.new
+  #       b2 = CustomB.new
+  #       a.bs << b1
+  #       a.bs << b2
+  #       puts JSON.pretty_generate(a)
+  # # => {"json_class":"A","one":null,"two":null,"three":null,"bs":[{"json_class":"B","x":null,"y":null,"z":null},{"json_class":"B","x":null,"y":null,"z":null}]}
+  #      }
+  #   end
 end
