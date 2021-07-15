@@ -23,3 +23,7 @@ group :development, :test do
   gem 'rubocop-rake', require: false
   gem 'rubocop-rspec', require: false
 end
+
+group :test do
+  gem 'dry-struct', '~> 1'
+end

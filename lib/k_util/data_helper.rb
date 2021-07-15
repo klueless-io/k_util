@@ -31,7 +31,7 @@ module KUtil
       when Array
         data.map { |o| to_open_struct(o) }
 
-      when Struct, OpenStruct
+      when Struct, OpenStruct, Dry::Struct
         to_open_struct(data.to_h)
 
       else
@@ -41,27 +41,20 @@ module KUtil
     end
 
     # rubocop:disable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
+    # Convert data to hash and deal with mixed data types such as Struct and OpenStruct
     def to_hash(data)
-      # No test yet
-      if data.is_a?(Array)
-        return data.map { |v| v.is_a?(OpenStruct) ? to_hash(v) : v }
-      end
+      return {} if data.nil?
 
-      return to_hash(data.to_h) if !data.is_a?(Hash) && data.respond_to?(:to_h)
+      return data.map { |v| hash_convertible?(v) ? to_hash(v) : v } if data.is_a?(Array)
+
+      return to_hash(data.to_h)                                     if !data.is_a?(Hash) && data.respond_to?(:to_h)
 
       data.each_pair.with_object({}) do |(key, value), hash|
-        case value
-        when OpenStruct, Struct, Hash
-          hash[key] = to_hash(value)
-        when Array
-          # No test yet
-          values = value.map do |v|
-            v.is_a?(OpenStruct) || v.is_a?(Struct) || v.is_a?(Hash) ? to_hash(v) : v
-          end
-          hash[key] = values
-        else
-          hash[key] = value
-        end
+        hash[key] = if hash_convertible?(value)
+                      to_hash(value)
+                    else
+                      value
+                    end
       end
     end
     # rubocop:enable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
