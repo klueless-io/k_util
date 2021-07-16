@@ -176,9 +176,16 @@ RSpec.describe KUtil::DataHelper do
     end
 
     context 'root object is hash' do
+      context 'simple key/value has nil' do
+        let(:data) { { blank: nil, not_blank: 'value' } }
+
+        it { is_expected.to eq({ blank: nil, not_blank: 'value' }) }
+      end
+
       context 'when types are mixed at depth' do
         let(:data) do
           {
+            blank: nil,
             simple: :hash,
             open: virgil,
             dry: dry1,
@@ -189,6 +196,7 @@ RSpec.describe KUtil::DataHelper do
         end
         let(:expected) do
           {
+            blank: nil,
             custom: { name: 'John Doe' },
             dry: { age: 21, more: { name: 'me' }, name: 'dry1.name' },
             open: { age: 73, name: 'Virgil Tracy', thunder_bird: { action: :are_grounded } },
