@@ -54,16 +54,15 @@ module KUtil
       value.is_a?(Symbol) ? value.to_s : value
     end
 
-    # Add if needed
-    # # Is the value a basic (aka primitive) type
-    # def basic_type?(value)
-    #   value.is_a?(String) ||
-    #     value.is_a?(Symbol) ||
-    #     value.is_a?(FalseClass) ||
-    #     value.is_a?(TrueClass) ||
-    #     value.is_a?(Integer) ||
-    #     value.is_a?(Float)
-    # end
+    # Is the value a basic (aka primitive) type
+    def basic_type?(value)
+      value.is_a?(String) ||
+        value.is_a?(Symbol) ||
+        value.is_a?(FalseClass) ||
+        value.is_a?(TrueClass) ||
+        value.is_a?(Integer) ||
+        value.is_a?(Float)
+    end
 
     # Is the value a complex container type, but not a regular class.
     def hash_convertible?(value)
