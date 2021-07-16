@@ -327,6 +327,13 @@ RSpec.describe KUtil::DataHelper do
   describe '#hash_convertible?' do
     subject { instance.hash_convertible?(value) }
 
+    context 'when value is nil' do
+      # Nil is a special case, it responds to :to_h but generally
+      # you only want to convert nil to {} in specific scenarios
+      let(:value) { nil }
+      it { is_expected.to eq(false) }
+    end
+
     context 'when value is array' do
       let(:value) { [] }
       it { is_expected.to eq(true) }

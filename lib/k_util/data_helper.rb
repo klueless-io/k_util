@@ -43,11 +43,7 @@ module KUtil
       return to_hash(data.to_h) if !data.is_a?(Hash) && data.respond_to?(:to_h)
 
       data.each_pair.with_object({}) do |(key, value), hash|
-        hash[key] = if value.nil?
-                      nil
-                    else
-                      hash_convertible?(value) ? to_hash(value) : value
-                    end
+        hash[key] = hash_convertible?(value) ? to_hash(value) : value
       end
     end
     # rubocop:enable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
@@ -71,6 +67,10 @@ module KUtil
 
     # Is the value a complex container type, but not a regular class.
     def hash_convertible?(value)
+      # Nil is a special case, it responds to :to_h but generally
+      # you only want to convert nil to {} in specific scenarios
+      return false if value.nil?
+
       value.is_a?(Array) ||
         value.is_a?(Hash) ||
         value.is_a?(Struct) ||
