@@ -307,22 +307,39 @@ RSpec.describe KUtil::DataHelper do
     end
   end
 
-  # Add if needed
-  # describe '#basic_type?' do
-  #   subject { instance.basic_type?(value) }
+  describe '#basic_type?' do
+    subject { instance.basic_type?(value) }
 
-  #   context 'when value is string' do
-  #     let(:value) { 'a_string' }
+    context 'when value is string' do
+      let(:value) { 'a_string' }
 
-  #     it { is_expected.to eq(true) }
-  #   end
+      it { is_expected.to eq(true) }
+    end
 
-  #   context 'when value is integer' do
-  #     let(:value) { 123 }
+    context 'when value is integer' do
+      let(:value) { 123 }
 
-  #     it { is_expected.to eq(true) }
-  #   end
-  # end
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is float' do
+      let(:value) { 123.222 }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is boolean true' do
+      let(:value) { true }
+
+      it { is_expected.to eq(true) }
+    end
+
+    context 'when value is boolean false' do
+      let(:value) { false }
+
+      it { is_expected.to eq(true) }
+    end
+  end
 
   describe '#hash_convertible?' do
     subject { instance.hash_convertible?(value) }
