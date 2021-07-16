@@ -35,6 +35,7 @@ module KUtil
     # rubocop:disable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     # Convert data to hash and deal with mixed data types such as Struct and OpenStruct
     def to_hash(data)
+      # This nil check is only for the root object
       return {} if data.nil?
 
       return data.map { |value| hash_convertible?(value) ? to_hash(value) : value } if data.is_a?(Array)
@@ -42,7 +43,11 @@ module KUtil
       return to_hash(data.to_h) if !data.is_a?(Hash) && data.respond_to?(:to_h)
 
       data.each_pair.with_object({}) do |(key, value), hash|
-        hash[key] = hash_convertible?(value) ? to_hash(value) : value
+        hash[key] = if value.nil?
+                      nil
+                    else
+                      hash_convertible?(value) ? to_hash(value) : value
+                    end
       end
     end
     # rubocop:enable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
