@@ -8,7 +8,9 @@ module KUtil
     #
     # https://docs.ruby-lang.org/en/master/JSON.html
     # rubocop:disable Naming/MethodParameterName
-    def json_parse(json, as: :hash)
+    def parse_json(json, as: :hash)
+      log.block(%i[hash hash_symbolized open_struct], title: 'Help as: ?') if as == :help
+
       case as
       when :hash
         JSON.parse(json)
@@ -18,6 +20,7 @@ module KUtil
         JSON.parse(json, object_class: OpenStruct)
       end
     end
+    alias json_parse parse_json
     # rubocop:enable Naming/MethodParameterName
 
     # Convert various data types (Hash, Array, Struct) into a deep nested OpenStruct
@@ -53,6 +56,11 @@ module KUtil
 
       value.is_a?(Symbol) ? value.to_s : value
     end
+
+    def symbolize_names(hash)
+      hash.transform_keys(&:to_sym)
+    end
+    alias symbolize_keys symbolize_names
 
     # Is the value a basic (aka primitive) type
     def basic_type?(value)
