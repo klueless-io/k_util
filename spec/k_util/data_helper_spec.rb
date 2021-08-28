@@ -307,6 +307,35 @@ RSpec.describe KUtil::DataHelper do
     end
   end
 
+  describe '#deep_symbolize_keys' do
+    subject { instance.deep_symbolize_keys(value) }
+
+    context 'when value is nil' do
+      let(:value) { nil }
+
+      it { is_expected.to be_nil }
+    end
+
+    context 'when value is complex nesting' do
+      let(:value) do
+        {
+          'A' => 1,
+          'B' => [{ 'a' => 'a1' }, { 'a' => 'a2' }],
+          'c' => { 'D' => { e: 'ee' } },
+          'f' => %i[david sean]
+        }
+      end
+
+      it do
+        is_expected.to eq({
+                            A: 1,
+                            B: [{ a: 'a1' }, { a: 'a2' }],
+                            c: { D: { e: 'ee' } },
+                            f: %i[david sean]
+                          })
+      end
+    end
+  end
   describe '#basic_type?' do
     subject { instance.basic_type?(value) }
 

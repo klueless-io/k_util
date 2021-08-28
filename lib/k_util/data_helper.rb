@@ -6,6 +6,7 @@ module KUtil
   class DataHelper
     # Convert JSON string into to_open_struct but designed to work with a JSON string
     #
+    # KUtil.data.parse_json(json, as: :symbolize_keys)
     # https://docs.ruby-lang.org/en/master/JSON.html
     # rubocop:disable Naming/MethodParameterName
     def parse_json(json, as: :hash)
@@ -14,7 +15,7 @@ module KUtil
       case as
       when :hash
         JSON.parse(json)
-      when :hash_symbolized
+      when :hash_symbolized, :symbolize_names, :symbolize_keys
         JSON.parse(json, symbolize_names: true)
       when :open_struct
         JSON.parse(json, object_class: OpenStruct)
@@ -57,10 +58,24 @@ module KUtil
       value.is_a?(Symbol) ? value.to_s : value
     end
 
-    def symbolize_names(hash)
-      hash.transform_keys(&:to_sym)
+    def deep_symbolize_keys(input)
+      return input if input.nil?
+
+      return input unless input.is_a?(Hash)
+
+      input.each_with_object({}) do |key_value, new_hash|
+        key, value = key_value
+        value = deep_symbolize_keys(value)                  if value.is_a?(Hash)
+        value = value.map { |v| deep_symbolize_keys(v) }    if value.is_a?(Array)
+        new_hash[key.to_sym] = value
+      end
     end
-    alias symbolize_keys symbolize_names
+
+    # def deep_symbolize_keys(hash)
+    #   return hash if hash.nil?
+
+    #   hash.transform_keys(&:to_sym)
+    # end
 
     # Is the value a basic (aka primitive) type
     def basic_type?(value)
