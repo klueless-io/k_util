@@ -26,5 +26,12 @@ module KUtil
     def home_or_absolute?(path)
       home?(path) || absolute?(path)
     end
+
+    def parse_uri(uri)
+      return uri if uri.is_a?(URI)
+      return URI.parse(uri) if uri =~ URI::ABS_URI # https://stackoverflow.com/questions/1805761/how-to-check-if-a-url-is-valid
+
+      URI.join('file:///', uri)
+    end
   end
 end
