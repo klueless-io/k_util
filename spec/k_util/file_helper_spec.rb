@@ -112,4 +112,39 @@ RSpec.describe KUtil::FileHelper do
       it { is_expected.to be_truthy }
     end
   end
+
+  describe '#parse_uri' do
+    subject { instance.parse_uri(uri) }
+
+    context 'when http path' do
+      let(:uri) { 'http://my.com/insecure' }
+
+      it do
+        is_expected
+          .to  have_attributes(scheme: 'http', path: '/insecure')
+          .and be_a(URI::HTTP)
+      end
+    end
+
+    context 'when https path' do
+      let(:uri) { 'https://my.com/secure' }
+
+      it do
+        is_expected
+          .to  have_attributes(scheme: 'https', path: '/secure')
+          .and be_a(URI::HTTPS)
+      end
+    end
+
+
+    context 'when file path' do
+      let(:uri) { 'somefile.rb' }
+
+      it do
+        is_expected
+          .to  have_attributes(scheme: 'file', path: '/somefile.rb')
+          .and be_a(URI::File)
+      end
+    end
+  end
 end
