@@ -26,6 +26,7 @@ module KUtil
 
     # Convert various data types (Hash, Array, Struct) into a deep nested OpenStruct
     #
+    # KUtil.data.to_open_struct(data)
     # or an array of deep nested OpenStruct
     def to_open_struct(data)
       return OpenStruct.new(data.transform_values { |v| to_open_struct(v) })  if data.is_a?(Hash)
@@ -38,6 +39,7 @@ module KUtil
 
     # rubocop:disable Metrics/AbcSize,  Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     # Convert data to hash and deal with mixed data types such as Struct and OpenStruct
+    # KUtil.data.to_hash(data)
     def to_hash(data)
       # This nil check is only for the root object
       return {} if data.nil?
