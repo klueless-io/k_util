@@ -45,7 +45,7 @@ RSpec.describe KUtil::Data::InstanceVariablesToH do
         HashConvertible.new('David', 333, key3, [virgil, penny])
       end
 
-      fit do
+      it do
         is_expected.to eq(
           {
             'key1' => 'David',
@@ -57,10 +57,10 @@ RSpec.describe KUtil::Data::InstanceVariablesToH do
             ]
           }
         )
-        data_open = KUtil.data.to_open_struct(data)
-        data_hash = KUtil.data.to_hash(data_open)
+        # data_open = KUtil.data.to_open_struct(data)
+        # data_hash = KUtil.data.to_hash(data_open)
 
-        puts JSON.pretty_generate(data_hash)
+        # puts JSON.pretty_generate(data_hash)
       end
     end
   end
