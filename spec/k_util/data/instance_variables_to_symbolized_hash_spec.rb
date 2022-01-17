@@ -2,10 +2,10 @@
 
 require 'spec_helper'
 require 'json'
-require 'mocks/hash_convertible'
+require 'mocks/symbolized_hash_convertible'
 require 'mocks/thunder_birds'
 
-RSpec.describe KUtil::Data::InstanceVariablesToH do
+RSpec.describe KUtil::Data::InstanceVariablesToSymbolizedHash do
   subject { data.to_h }
 
   context 'when complex data object' do
@@ -16,20 +16,20 @@ RSpec.describe KUtil::Data::InstanceVariablesToH do
           x2: 2,
           x3: 3
         }
-        HashConvertible.new('David', 333, key3)
+        SymbolizedHashConvertible.new('David', 333, key3)
       end
 
       it do
         is_expected.to eq(
           {
-            'key1' => 'David',
-            'key2' => 333,
-            'key3' => {
+            key1: 'David',
+            key2: 333,
+            key3: {
               x1: 1,
               x2: 2,
               x3: 3
             },
-            'people' => []
+            people: []
           }
         )
       end
@@ -42,25 +42,21 @@ RSpec.describe KUtil::Data::InstanceVariablesToH do
         key3 = {
           value: ThunderBirds.new(:are_go)
         }
-        HashConvertible.new('David', 333, key3, [virgil, penny])
+        SymbolizedHashConvertible.new('David', 333, key3, [virgil, penny])
       end
 
       it do
         is_expected.to eq(
           {
-            'key1' => 'David',
-            'key2' => 333,
-            'key3' => { value: { action: :are_go } },
-            'people' => [
+            key1: 'David',
+            key2: 333,
+            key3: { value: { action: :are_go } },
+            people: [
               { age: 73, name: 'Virgil Tracy', thunder_bird: { action: :are_grounded } },
               { age: 69, name: 'Lady Penelope', thunder_bird: { action: :are_go } }
             ]
           }
         )
-        # data_open = KUtil.data.to_open_struct(data)
-        # data_hash = KUtil.data.to_hash(data_open)
-
-        # puts JSON.pretty_generate(data_hash)
       end
     end
   end

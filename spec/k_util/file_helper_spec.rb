@@ -136,7 +136,6 @@ RSpec.describe KUtil::FileHelper do
       end
     end
 
-
     context 'when file path' do
       let(:uri) { 'somefile.rb' }
 

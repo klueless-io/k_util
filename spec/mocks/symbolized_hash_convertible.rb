@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-class HashConvertible
-  include KUtil::Data::InstanceVariablesToH
+class SymbolizedHashConvertible
+  include KUtil::Data::InstanceVariablesToSymbolizedHash
 
   attr_accessor :key1
   attr_accessor :key2
