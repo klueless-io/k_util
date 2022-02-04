@@ -7,8 +7,9 @@ module KUtil
     def capture2(cmd, **opts)
       output, status = Open3.capture2(cmd, **opts)
 
-      unless success?
-        binding.pry
+      unless status.success?
+        puts "failed to run command: #{cmd}"
+        # bxxxinding.pry
       end
 
       raise Open3Error unless status.success?
