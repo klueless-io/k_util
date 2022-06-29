@@ -39,4 +39,5 @@ Gem::Specification.new do |spec|
   # spec.extensions    = ['ext/k_util/extconf.rb']
 
   # spec.add_dependency 'tty-box',         '~> 0.5.0'
+  spec.metadata['rubygems_mfa_required'] = 'true'
 end
