@@ -27,7 +27,7 @@ module KUtil
   KUtil.open3 = KUtil::Open3Helper.new
 end
 
-if ENV['KLUE_DEBUG']&.to_s&.downcase == 'true'
+if ENV.fetch('KLUE_DEBUG', 'false').downcase == 'true'
   namespace = 'KUtil::Version'
   file_path = $LOADED_FEATURES.find { |f| f.include?('k_util/version') }
   version   = KUtil::VERSION.ljust(9)
