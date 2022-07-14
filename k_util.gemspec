@@ -22,9 +22,10 @@ Gem::Specification.new do |spec|
 
   # spec.metadata['allowed_push_host'] = "Set to 'http://mygemserver.com'"
 
-  spec.metadata['homepage_uri'] = spec.homepage
-  spec.metadata['source_code_uri'] = 'https://github.com/klueless-io/k_util'
-  spec.metadata['changelog_uri'] = 'https://github.com/klueless-io/k_util/commits/master'
+  spec.metadata['homepage_uri']           = spec.homepage
+  spec.metadata['source_code_uri']        = 'https://github.com/klueless-io/k_util'
+  spec.metadata['changelog_uri']          = 'https://github.com/klueless-io/k_util/commits/master'
+  spec.metadata['rubygems_mfa_required']  = 'true'
 
   # Specify which files should be added to the gem when it is released.
   # The `git ls-files -z` loads the RubyGem files that have been added into git.
@@ -39,5 +40,4 @@ Gem::Specification.new do |spec|
   # spec.extensions    = ['ext/k_util/extconf.rb']
 
   # spec.add_dependency 'tty-box',         '~> 0.5.0'
-  spec.metadata['rubygems_mfa_required'] = 'true'
 end
