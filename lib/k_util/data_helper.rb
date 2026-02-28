@@ -60,6 +60,24 @@ module KUtil
       value.is_a?(Symbol) ? value.to_s : value
     end
 
+    # Convert a hash to a deep nested hash with symbolized keys
+    # THIS CAME FROM CHAT GPT, I LIKE IT
+    # def deep_transform_keys(hash)
+    #   hash.each_with_object({}) do |(key, value), result|
+    #     # Use the block if given, otherwise convert keys to symbols by default
+    #     transformed_key = block_given? ? yield(key) : key.to_sym
+        
+    #     result[transformed_key] = case value
+    #                               when Hash
+    #                                 deep_transform_keys(value) { |k| block_given? ? yield(k) : k.to_sym }
+    #                               when Array
+    #                                 value.map { |v| v.is_a?(Hash) ? deep_transform_keys(v) { |k| block_given? ? yield(k) : k.to_sym } : v }
+    #                               else
+    #                                 value
+    #                               end
+    #   end
+    # end
+
     def deep_symbolize_keys(input)
       return input if input.nil?
 
